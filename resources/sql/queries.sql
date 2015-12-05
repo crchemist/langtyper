@@ -34,3 +34,12 @@ WHERE state = 0 LIMIT 1
 INSERT INTO races
 (id, state, track)
 VALUES (:id, 0, :track)
+
+-- name: join-user-race!
+INSERT INTO users_races 
+(user_id, race_id)
+VALUES (:user_id, :race_id)
+
+--name: leave-user-race!
+DELETE FROM users_races
+WHERE user_id = :user_id AND race_id = :race_id
