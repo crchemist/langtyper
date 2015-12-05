@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="jumbotron">
+    <h1>Welcome to langtyper</h1>
+    <a
+    href="https://github.com/login/oauth/authorize?scope=user:email&client_id=0ec7d46ad5dd940274ee">Login via GitHub</a>
+    <p><a class="btn btn-primary btn-lg" href="http://luminusweb.net">Learn more &raquo;</a></p>
+  </div>
+
+  <div class="row">
+    <div class="span12">
+    {{docs|markdown}}
+    </div>
+  </div>
+{% endblock %}
