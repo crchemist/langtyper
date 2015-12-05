@@ -48,3 +48,9 @@ WHERE user_id = :user_id AND race_id = :race_id
 SELECT races.id, races.state, races.track FROM users_races
                                           JOIN races ON (users_races.race_id = races.id)
 WHERE users_races.user_id = :user_id AND races.state = 1
+
+
+--name: finish-user-race!
+UPDATE users_races
+SET passed = :passed
+WHERE user_id = :user_id AND race_id = :race_id

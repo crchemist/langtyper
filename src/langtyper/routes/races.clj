@@ -25,5 +25,16 @@
               :track (race :track)}})))
 
 
+(defn race-finish [passed req]
+  (let [user_id (name (:identity req))
+        race (helpers/get-race user_id)
+        race_id (race :id)
+        passed (not= 0 (Integer/parseInt passed))]
+    (do
+      (println (str "Finish race: " user_id race_id))
+      (helpers/finish-user-race user_id race passed)
+      {:body {:status 200}})))
+
 (defroutes races-routes
-  (GET "/races/get/" req (races-get req)))
+  (GET "/races/get/" req (races-get req))
+  (GET "/races/finish/" [passed :as req] (race-finish passed req)))

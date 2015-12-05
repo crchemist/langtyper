@@ -59,3 +59,9 @@
       (if (empty? race)
         (get-new-race)
         (first race)))))
+
+(defn finish-user-race [user_id race passed]
+  (let [race_id (race :id)]
+    (db/finish-user-race! {:user_id user_id
+                          :race_id race_id
+                          :passed passed})))
