@@ -29,3 +29,8 @@ WHERE id = :id
 -- name: get-new-race
 SELECT * FROM races
 WHERE state = 0 LIMIT 1
+
+-- name: create-new-race!
+INSERT INTO races
+(id, state, track)
+VALUES (:id, 0, :track)

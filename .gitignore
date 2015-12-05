@@ -1,7 +1,9 @@
 pom.xml
 pom.xml.asc
 *jar
+.lein-env
 *.swp
+*.swo
 /lib/
 /classes/
 /target/
