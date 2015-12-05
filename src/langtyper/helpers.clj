@@ -1,6 +1,8 @@
 (ns langtyper.helpers
+  (:import [java.util UUID])
   (:require [compojure.core :refer [defroutes routes wrap-routes]]
             [compojure.route :as route]
+            [clojure.string :refer [join]]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.3rd-party.rotor :as rotor]
             [selmer.parser :as parser]
@@ -22,3 +24,5 @@
     (json/parse-string (fn [^String s] (keyword (.replace s \_ \-))))))
 
 (def get-gh-user-info (memoize (partial call-github "/user")))
+
+(defn uuid [] (join "" (take 19 (str (UUID/randomUUID)))))

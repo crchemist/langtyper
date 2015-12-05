@@ -5,7 +5,7 @@
             [ring.util.http-response :refer [ok]]
             [ring.util.response :refer [redirect]]
             [clojure.java.io :as io]
-            [langtyper.helpers :refer [call-github get-gh-user-info]]
+            [langtyper.helpers :refer [uuid]]
             [clj-http.client :as http]
             [clojure.walk :refer [keywordize-keys]]))
 
@@ -13,7 +13,7 @@
   (let [race (db/get-new-race)]
     (do
       ;; try to get race with state=NEW
-      (println race)
+      (println (uuid))
       {:body {:id "10"}})))
 
 (defroutes races-routes
