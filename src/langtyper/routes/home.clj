@@ -4,6 +4,7 @@
             [ring.util.http-response :refer [ok]]
             [ring.util.response :refer [redirect]]
             [clojure.java.io :as io]
+            [ring.util.response :refer [response]]
             [langtyper.helpers :refer [call-github get-gh-user-info]]
             [clj-http.client :as http]
             [clojure.walk :refer [keywordize-keys]]))
@@ -18,19 +19,22 @@
   (layout/render "about.html"))
 
 
-(defn github-callback [code]
+
+(defn github-callback [code req]
   (let [gh_resp (http/post "https://github.com/login/oauth/access_token"
                            {:form-params {:client_id "0ec7d46ad5dd940274ee"
                                           :client_secret "cf0c39adc58fef8ec560c6c75f62011b16a1b5ed"
                                           :code code}})
         resp-body (gh_resp :body)
-        access_token ((-> resp-body query->map keywordize-keys) :access_token)]
+        access_token ((-> resp-body query->map keywordize-keys) :access_token)
+        gh_user_id (str ((get-gh-user-info access_token) :id))
+        session (:session req)]
     (do
-      (println (get-gh-user-info access_token))
-      (redirect "/"))))
+      (-> (redirect "/")
+          (assoc :session (assoc session :identity (keyword gh_user_id)))))))
+
 
 (defroutes home-routes
   (GET "/" [] (home-page))
-  (GET "/callback" [code] (github-callback code))
+  (GET "/callback" [code :as req] (github-callback code req))
   (GET "/about/" [] (about-page)))
-
