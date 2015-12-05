@@ -9,6 +9,7 @@
             [clj-http.client :as http]
             [clojure.walk :refer [keywordize-keys]]))
 
+
 (defn races-get []
   (let [race (db/get-new-race)]
     (do
@@ -19,6 +20,7 @@
           (println race))
       (println ((first race) :id)))
       {:body {:id ((first race) :id)}})))
+
 
 (defroutes races-routes
   (GET "/races/get/" [] (races-get)))
