@@ -7,18 +7,22 @@
             [ring.util.response :refer [response]]
             [langtyper.helpers :refer [call-github get-gh-user-info]]
             [clj-http.client :as http]
-            [clojure.walk :refer [keywordize-keys]]))
+            [clojure.walk :refer [keywordize-keys]]
+            [buddy.auth :refer [authenticated? throw-unauthorized]]))
 
 (require '[cemerick.url :refer (url query->map)])
 
-(defn home-page []
-  (layout/render
-    "home.html" {:docs (-> "docs/docs.md" io/resource slurp)}))
+(defn home-page [req]
+  (if-not (authenticated? req)
+    (layout/render
+     "home.html" {:docs (-> "docs/docs.md" io/resource slurp)
+                  :authenticated false} )
+    (layout/render
+    "home.html" {:docs (-> "docs/docs.md" io/resource slurp)
+                 :authenticated true})))
 
 (defn about-page []
   (layout/render "about.html"))
-
-
 
 (defn github-callback [code req]
   (let [gh_resp (http/post "https://github.com/login/oauth/access_token"
@@ -33,8 +37,13 @@
       (-> (redirect "/")
           (assoc :session (assoc session :identity (keyword gh_user_id)))))))
 
+(defn logout
+  [request]
+  (-> (redirect "/")
+      (assoc :session {})))
 
 (defroutes home-routes
-  (GET "/" [] (home-page))
+  (GET "/" [:as req] (home-page req))
   (GET "/callback" [code :as req] (github-callback code req))
-  (GET "/about/" [] (about-page)))
+  (GET "/about/" [] (about-page))
+  (GET "/logout" [req] (logout req)))
