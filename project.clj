@@ -16,6 +16,7 @@
                  [com.taoensso/tower "3.0.2"]
                  [com.taoensso/timbre "4.1.4"]
                  [com.fzakaria/slf4j-timbre "0.2.1"]
+                 [com.cemerick/url "0.1.1"]
                  [compojure "1.4.0"]
                  [clj-http "2.0.0"]
                  [ring-webjars "0.1.1"]

@@ -4,7 +4,10 @@
             [ring.util.http-response :refer [ok]]
             [ring.util.response :refer [redirect]]
             [clojure.java.io :as io]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [clojure.walk :refer [keywordize-keys]]))
+
+(require '[cemerick.url :refer (url query->map)])
 
 (defn home-page []
   (layout/render
@@ -15,13 +18,15 @@
 
 
 (defn github-callback [code]
-  (do
-    (println ((http/post "https://github.com/login/oauth/access_token"
-      {:form-params {:client_id "0ec7d46ad5dd940274ee"
-                     :client_secret "cf0c39adc58fef8ec560c6c75f62011b16a1b5ed"
-                     :code code}
-       :content-type :json}) :body) )
-    (redirect "/")))
+  (let [gh_resp (http/post "https://github.com/login/oauth/access_token"
+                           {:form-params {:client_id "0ec7d46ad5dd940274ee"
+                                          :client_secret "cf0c39adc58fef8ec560c6c75f62011b16a1b5ed"
+                                          :code code}})
+        resp-body (gh_resp :body)
+        access_token ((-> resp-body query->map keywordize-keys) :access_token)]
+    (do
+      (println access_token)
+      (redirect "/"))))
 
 (defroutes home-routes
   (GET "/" [] (home-page))
