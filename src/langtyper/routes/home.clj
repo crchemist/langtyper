@@ -4,6 +4,7 @@
             [ring.util.http-response :refer [ok]]
             [ring.util.response :refer [redirect]]
             [clojure.java.io :as io]
+            [langtyper.helpers :refer [call-github get-gh-user-info]]
             [clj-http.client :as http]
             [clojure.walk :refer [keywordize-keys]]))
 
@@ -25,7 +26,7 @@
         resp-body (gh_resp :body)
         access_token ((-> resp-body query->map keywordize-keys) :access_token)]
     (do
-      (println access_token)
+      (println (get-gh-user-info access_token))
       (redirect "/"))))
 
 (defroutes home-routes
