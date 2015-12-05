@@ -18,11 +18,11 @@
       (if (empty? race)
         (let [race_id (db/create-new-race! {:id (uuid)
                                             :track (helpers/get-random-track)})
-              race (db/get-new-race)]
-          (println race))
-      (println ((first race) :id)))
+              race (first (db/get-new-race))]
+          {:body {:id (race :id)
+                  :track (race :track)}})
       {:body {:id ((first race) :id)
-              :track ((first race) :track)}})))
+              :track ((first race) :track)}}))))
 
 
 (defroutes races-routes
