@@ -7,6 +7,7 @@ CREATE TABLE users_races
  race_id VARCHAR(20),
 
  start_time TIME,
+ end_time TIME,
  
  time INTEGER,
  errors INTEGER,
