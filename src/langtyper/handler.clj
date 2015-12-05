@@ -2,6 +2,7 @@
   (:require [compojure.core :refer [defroutes routes wrap-routes]]
             [langtyper.layout :refer [error-page]]
             [langtyper.routes.home :refer [home-routes]]
+            [langtyper.routes.races :refer [races-routes]]
             [langtyper.middleware :as middleware]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
@@ -40,6 +41,7 @@
 (def app-routes
   (routes
     (wrap-routes #'home-routes middleware/wrap-csrf)
+    (wrap-routes #'races-routes middleware/wrap-csrf)
     (route/not-found
       (:body
         (error-page {:status 404

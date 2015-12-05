@@ -19,3 +19,13 @@ WHERE id = :id
 -- delete a user given the id
 DELETE FROM users
 WHERE id = :id
+
+-- name: get-user
+-- retrieve a user given the id.
+SELECT * FROM users
+WHERE id = :id
+
+
+-- name: get-new-race
+SELECT * FROM races
+WHERE state = 0 LIMIT 1
