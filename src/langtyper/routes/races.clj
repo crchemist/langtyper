@@ -13,8 +13,12 @@
   (let [race (db/get-new-race)]
     (do
       ;; try to get race with state=NEW
-      (println (uuid))
-      {:body {:id "10"}})))
+      (if (empty? race)
+        (let [race_id (db/create-new-race! {:id (uuid)})
+              race (db/get-new-race)]
+          (println race))
+      (println ((first race) :id)))
+      {:body {:id ((first race) :id)}})))
 
 (defroutes races-routes
   (GET "/races/get/" [] (races-get)))
