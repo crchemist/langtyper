@@ -1,0 +1,1 @@
+ALTER TABLE races ADD track VARCHAR(90000)

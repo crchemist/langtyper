@@ -12,6 +12,7 @@
             [langtyper.config :refer [defaults]]
             [mount.core :as mount]))
 
+(use 'clojure.java.io)
 
 (defn call-github
   [endpoint access-token]
@@ -23,6 +24,16 @@
     :body
     (json/parse-string (fn [^String s] (keyword (.replace s \_ \-))))))
 
+
 (def get-gh-user-info (memoize (partial call-github "/user")))
 
+
 (defn uuid [] (join "" (take 19 (str (UUID/randomUUID)))))
+
+
+(defn get-random-track []
+  (let [tracks-path "resources/tracks/clojure"
+        tracks-dir (file tracks-path)
+        tracks (filter #(not= tracks-path (.getPath %))(file-seq tracks-dir))
+        track (rand-nth tracks)]
+      (slurp track)))

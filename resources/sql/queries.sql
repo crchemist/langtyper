@@ -32,5 +32,5 @@ WHERE state = 0 LIMIT 1
 
 -- name: create-new-race!
 INSERT INTO races
-(id, state)
-VALUES (:id, 0)
+(id, state, track)
+VALUES (:id, 0, :track)
