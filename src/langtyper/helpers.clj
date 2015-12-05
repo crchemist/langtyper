@@ -3,6 +3,7 @@
   (:require [compojure.core :refer [defroutes routes wrap-routes]]
             [compojure.route :as route]
             [clojure.string :refer [join]]
+            [langtyper.db.core :as db]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.3rd-party.rotor :as rotor]
             [selmer.parser :as parser]
@@ -37,3 +38,24 @@
         tracks (filter #(not= tracks-path (.getPath %))(file-seq tracks-dir))
         track (rand-nth tracks)]
       (slurp track)))
+
+(defn create-new-race []
+  (let [track (get-random-track)]
+    (do
+      (db/create-new-race! {:id (uuid)
+                            :track track})
+      (first (db/get-new-race)))))
+
+(defn get-new-race []
+  (let [race (db/get-new-race)]
+    (if (empty? race)
+      (create-new-race)
+      (first race))))
+
+(defn get-race [user_id]
+  ; Try to get race IN-PROGRESS
+  (let [race (db/get-current-race {:user_id user_id})]
+    (do
+      (if (empty? race)
+        (get-new-race)
+        (first race)))))

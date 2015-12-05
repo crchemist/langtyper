@@ -12,22 +12,17 @@
 
 
 (defn races-get [req]
-  (let [race (db/get-new-race)
-        user_id (:identity req)]
+  (let [user_id (name (:identity req))
+        race (helpers/get-race user_id)]
     (do
-      ;; try to get race with state=NEW
-      (if (empty? race)
-        (let [race_id (db/create-new-race! {:id (uuid)
-                                            :track (helpers/get-random-track)})
-              race (first (db/get-new-race))
-              
-              res (db/join-user-race! {:user_id user_id :race_id race_id})]
-          {:body {:id (race :id)
-                  :track (race :track)}})
-      (do
-        (db/join-user-race! {:user_id user_id :race_id ((first race) :id)})
-        {:body {:id ((first race) :id)
-              :track ((first race) :track)}})))))
+      (println (str "Users race: " (race :id)))
+      (println (str "User: " user_id))
+      (if (and (= (race :state) 0) (empty? (db/get-current-race {:user_id user_id})))
+        (db/join-user-race! {:user_id user_id
+                             :race_id (race :id)}))
+      {:body {:id (race :id)
+              :state (race :state)
+              :track (race :track)}})))
 
 
 (defroutes races-routes
