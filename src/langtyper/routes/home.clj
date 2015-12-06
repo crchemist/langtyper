@@ -1,5 +1,6 @@
 (ns langtyper.routes.home
   (:require [langtyper.layout :as layout]
+            [langtyper.db.core :as db]
             [compojure.core :refer [defroutes GET]]
             [ring.util.http-response :refer [ok]]
             [ring.util.response :refer [redirect]]
@@ -32,8 +33,12 @@
         resp-body (gh_resp :body)
         access_token ((-> resp-body query->map keywordize-keys) :access_token)
         gh_user_id (str ((get-gh-user-info access_token) :id))
-        session (:session req)]
+        session (:session req)
+        name (str ((get-gh-user-info access_token) :name))]
     (do
+      (if (db/get-user (assoc {} :id gh_user_id))
+        (db/update-user! (assoc {} :id gh_user_id :first_name name :last_name "" :email "" :pass ""))
+        (db/create-user! (assoc {} :id gh_user_id :first_name name :last_name "" :email "" :pass "")))
       (-> (redirect "/")
           (assoc :session (assoc session :identity (keyword gh_user_id)))))))
 
