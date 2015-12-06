@@ -37,8 +37,8 @@ VALUES (:id, 0, :track)
 
 -- name: join-user-race!
 INSERT INTO users_races 
-(user_id, race_id)
-VALUES (:user_id, :race_id)
+(user_id, race_id, start_time)
+VALUES (:user_id, :race_id, :start_time)
 
 --name: leave-user-race!
 DELETE FROM users_races
@@ -53,4 +53,8 @@ WHERE users_races.user_id = :user_id AND races.state = 1 AND users_races.passed 
 --name: finish-user-race!
 UPDATE users_races
 SET passed = :passed
+WHERE user_id = :user_id AND race_id = :race_id
+
+--name: get-race-status
+SELECT * FROM users_races
 WHERE user_id = :user_id AND race_id = :race_id

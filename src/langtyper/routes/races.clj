@@ -1,4 +1,5 @@
 (ns langtyper.routes.races
+  (:import java.util.Date)
   (:require [langtyper.layout :as layout]
             [langtyper.db.core :as db]
             [langtyper.helpers :as helpers]
@@ -10,6 +11,9 @@
             [clj-http.client :as http]
             [clojure.walk :refer [keywordize-keys]]))
 
+(defn get-time []
+  (let [d (Date.)]
+  (str (.getHours d) ":" (.getMinutes d) ":" (.getSeconds d))))
 
 (defn races-get [req]
   (let [user_id (name (:identity req))
@@ -17,9 +21,13 @@
     (do
       (println (str "Users race: " (race :id)))
       (println (str "User: " user_id))
+      (println (str "User-race: " (first (db/get-race-status {:user_id user_id
+                                                  :race_id (race :id)}))))
+      (println (str "Time: " (get-time)))
       (if (and (= (race :state) 0) (empty? (db/get-current-race {:user_id user_id})))
         (db/join-user-race! {:user_id user_id
-                             :race_id (race :id)}))
+                             :race_id (race :id)
+                             :start_time (get-time)}))
       {:body {:id (race :id)
               :state (race :state)
               :track (race :track)}})))
