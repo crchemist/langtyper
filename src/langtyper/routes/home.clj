@@ -36,9 +36,13 @@
         session (:session req)
         name (str ((get-gh-user-info access_token) :name))]
     (do
-      (if (db/get-user (assoc {} :id gh_user_id))
-        (db/update-user! (assoc {} :id gh_user_id :first_name name :last_name "" :email "" :pass ""))
-        (db/create-user! (assoc {} :id gh_user_id :first_name name :last_name "" :email "" :pass "")))
+      (if (empty? (db/get-user (assoc {} :id gh_user_id)))
+        (do
+          (println (db/get-user (assoc {} :id gh_user_id)))
+          (db/create-user! (assoc {} :id gh_user_id :first_name name :last_name "" :email "" :pass "")))
+        (do
+          (println (db/get-user (assoc {} :id gh_user_id)))
+          (db/update-user! (assoc {} :id gh_user_id :first_name name :last_name "" :email "" :pass ""))))
       (-> (redirect "/")
           (assoc :session (assoc session :identity (keyword gh_user_id)))))))
 
