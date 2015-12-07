@@ -23,7 +23,7 @@
                  :authenticated true})))
 
 (defn about-page []
-  (layout/render "about.html"))
+  (layout/render "index.html"))
 
 (defn github-callback [code req]
   (let [gh_resp (http/post "https://github.com/login/oauth/access_token"

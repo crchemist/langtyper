@@ -2,22 +2,13 @@
 {% block content %}
   <div class="jumbotron">
     <h1>Welcome to langtyper</h1>
-    {% if not authenticated %}
-    <a
-    href="https://github.com/login/oauth/authorize?scope=user:email&client_id=0ec7d46ad5dd940274ee">Login via GitHub</a>
-    {%endif%}
-    {% if authenticated %}
-    <a
-    href="/logout">Logout</a>
-    {%endif%}
-    <p><a class="btn btn-primary btn-lg" href="http://luminusweb.net">Learn more &raquo;</a></p>
     <button type="button" id="get-race" class="btn btn-primary">Get race</button>
     <button type="button" id="leave-race" class="btn btn-info">Leave race</button>
   </div>
 
   <div class="row">
     <div class="span12">
-    {{docs|markdown}}
+    Landing...
     </div>
   </div>
 {% endblock %}

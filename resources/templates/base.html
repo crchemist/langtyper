@@ -9,6 +9,9 @@
     {% style "/assets/bootstrap/css/bootstrap.min.css" %}
     {% style "/assets/bootstrap/css/bootstrap-theme.min.css" %}
     {% style "/css/screen.css" %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.11.0/bootstrap-social.min.css">
+
   </head>
   <body>
       <!-- navbar -->
@@ -34,9 +37,21 @@
                         <a href="{{servlet-context}}/">Home</a>
                         </li>
                         <li {% ifequal page "about.html" %} class="active"{%endifequal%}>
-                        <a href="{{servlet-context}}/about">About</a>
+                        <a href="{{servlet-context}}/about/">About</a>
                         </li>
                     </ul>
+      <ul class="pull-right nav">
+      <li>
+    {% if not authenticated %}
+               <a id="log" href="https://github.com/login/oauth/authorize?scope=user:email&client_id=0ec7d46ad5dd940274ee" class="btn btn-block btn-social btn-github">
+               <span class="fa fa-github"></span>......Sign in with GitHub</a>
+    {%endif%}
+    {% if authenticated %}
+               <a id="log" href="/logout" class="btn btn-block btn-social btn-github">
+               <span class="fa fa-github"></span>......Logout</a>
+    {%endif%}
+</li>
+      </ul>
                 </div>
             </div>
         </nav>
@@ -55,7 +70,7 @@
     <script type="text/javascript">
       var context = "{{servlet-context}}";
     </script>
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/main1.js"></script>
     {% block page-scripts %}
     {% endblock %}
   </body>
